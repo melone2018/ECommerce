@@ -57,7 +57,7 @@ public class SignUpActivity extends AppCompatActivity {
                         || address.isEmpty() || email.isEmpty() || password.isEmpty()){
                     nontifyInformationIncomplete("Please provide all information");
                 }else{
-                    sendCustomerInformation(fName, lName, mobile, address, email, password);
+                    registerCustomer(fName, lName, mobile, address, email, password);
                 }
 
             }
@@ -75,11 +75,11 @@ public class SignUpActivity extends AppCompatActivity {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
-    public void sendCustomerInformation(final String firstName, final String lastName, final String mobile, final String address, final String email, final String password)
+    public void registerCustomer(final String firstName, final String lastName, final String mobile, final String address, final String email, final String password)
     {
         Log.d("SEND CUSTOMER", firstName + " "+lastName + " "+mobile);
         boolean requestRes = false;
-        String url = PublicUtility.getInstance().getREGISTRATION();
+        String url = PublicUtility.getInstance().getRegistrationSite();
         Log.d("URL:", url);
         StringRequest strreq = new StringRequest(Request.Method.POST,
                 url,
