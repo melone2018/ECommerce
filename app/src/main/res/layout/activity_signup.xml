@@ -23,10 +23,7 @@
         android:id="@+id/EditTextFirstName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="24dp"
-        android:backgroundTint="#eeeeee"
-        android:background="@color/superLightGray"
+        style="@style/EditTextStyle"
         android:hint="First Name"/>
 
     <EditText
@@ -34,10 +31,7 @@
         android:id="@+id/EditTextLastName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="24dp"
-        android:backgroundTint="#eeeeee"
-        android:background="@color/superLightGray"
+        style="@style/EditTextStyle"
         android:hint="Last Name"/>
 
     <EditText
@@ -45,10 +39,7 @@
         android:id="@+id/EditTextAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="24dp"
-        android:backgroundTint="#eeeeee"
-        android:background="@color/superLightGray"
+        style="@style/EditTextStyle"
         android:hint="Address"/>
 
     <EditText
@@ -56,10 +47,7 @@
         android:id="@+id/EditTextMobile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="24dp"
-        android:backgroundTint="#eeeeee"
-        android:background="@color/superLightGray"
+        style="@style/EditTextStyle"
         android:hint="Mobile"/>
 
     <EditText
@@ -67,10 +55,7 @@
         android:id="@+id/EditTextEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="24dp"
-        android:backgroundTint="#eeeeee"
-        android:background="@color/superLightGray"
+        style="@style/EditTextStyle"
         android:hint="Email"/>
 
     <EditText
@@ -79,16 +64,14 @@
         android:id="@+id/EditTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="24dp"
-        android:backgroundTint="#eeeeee"
-        android:background="@color/superLightGray"
+        style="@style/EditTextStyle"
         android:hint="Password"/>
 
     <Button
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:text="Sign Up"
         android:background="#ffffff"
         android:backgroundTint="@color/colorAccent"/>

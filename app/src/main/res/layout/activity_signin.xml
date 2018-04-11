@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SigninActivity"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="40dp">
+
+    <TextView
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign in with mobile"
+        android:textColor="@color/colorAccent"
+        android:textSize="24dp"/>
+
+    <EditText
+        android:layout_margin="16dp"
+        android:id="@+id/EditTextSignInPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/EditTextStyle"
+        android:hint="Mobile Number"/>
+
+    <EditText
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/EditTextStyle"
+        android:hint="Password"/>
+
+
+    <CheckBox
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remember Me"/>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/ButtonSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:textColor="#ffffff"
+        android:text="Sign In"/>
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/ButtonWantAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/button_border"
+        android:text="Create an account?"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:id="@+id/TextViewForgetPw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Forgot Your Password ?"/>
+    </LinearLayout>
+
+</LinearLayout>
