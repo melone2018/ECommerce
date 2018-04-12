@@ -11,9 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.rjt.android.ecommerce.SignUpActivity" />
+        <activity android:name=".android.ecommerce.SignUpActivity" />
         <activity
-            android:name="com.rjt.android.ecommerce.SplashActivity"
+            android:name=".android.ecommerce.SplashActivity"
             android:theme="@style/AppSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,8 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.rjt.android.ecommerce.SigninActivity" />
-        <activity android:name="com.rjt.android.ecommerce.MenuActivity"></activity>
+        <activity android:name=".android.ecommerce.SigninActivity" />
+        <activity
+            android:name=".android.ecommerce.MenuActivity"
+            android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
