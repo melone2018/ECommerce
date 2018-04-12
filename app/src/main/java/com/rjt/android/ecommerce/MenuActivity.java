@@ -86,6 +86,7 @@ public class MenuActivity extends AppCompatActivity
         if (id == R.id.nav_user) {
             // Handle the camera action
             Toast.makeText(this, "You chose User navigation", Toast.LENGTH_SHORT).show();
+
         } else if (id == R.id.nav_profile) {
 
             //Toast.makeText(this, "You chose Profile navigation", Toast.LENGTH_SHORT).show();

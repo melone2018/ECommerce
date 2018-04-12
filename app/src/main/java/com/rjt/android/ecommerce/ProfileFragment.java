@@ -7,8 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.rjt.R;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -20,7 +24,13 @@ import com.rjt.R;
 public class ProfileFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-
+    private TextView mFirstName;
+    private TextView mLastName;
+    private TextView mMobile;
+    private TextView mAddress;
+    private TextView mEmail;
+    private Button mEdit;
+    private View mView;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -30,7 +40,16 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        mView =  (View)inflater.inflate(R.layout.fragment_profile, container, false);
+        mFirstName = mView.findViewById(R.id.TextViewFName);
+        mLastName = mView.findViewById(R.id.TextViewLName);
+        mMobile = mView.findViewById(R.id.TextViewPhone);
+        mAddress = mView.findViewById(R.id.TextViewAddr);
+        mEmail = mView.findViewById(R.id.TextViewEm);
+        mEdit = mView.findViewById(R.id.ButtonEditFile);
+
+
+        return mView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
