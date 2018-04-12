@@ -3,6 +3,8 @@ package com.rjt.android.ecommerce;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.JsonObject;
+
 public class PublicUtility {
     private static PublicUtility sPublicUtility;
     private static String REGISTRATION_SITE;
@@ -34,6 +36,9 @@ public class PublicUtility {
 
     public PublicUtility(){
 
+    }
+    public static void saveLoginData(JsonObject jsonObject){
+        String name = jsonObject.getAsString("name");
     }
     public static PublicUtility getInstance(){
         if(sPublicUtility==null){

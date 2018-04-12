@@ -1,8 +1,11 @@
 package com.rjt.android.ecommerce;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -86,7 +89,11 @@ public class MenuActivity extends AppCompatActivity
         if (id == R.id.nav_user) {
             // Handle the camera action
             Toast.makeText(this, "You chose User navigation", Toast.LENGTH_SHORT).show();
-
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            ProfileFragment profileFragment = new ProfileFragment();
+            transaction.add(R.id.fragmentContainer, profileFragment);
+            transaction.commit();
         } else if (id == R.id.nav_profile) {
 
             //Toast.makeText(this, "You chose Profile navigation", Toast.LENGTH_SHORT).show();

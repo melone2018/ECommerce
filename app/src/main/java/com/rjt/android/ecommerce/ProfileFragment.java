@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rjt.R;
 
@@ -47,7 +48,7 @@ public class ProfileFragment extends Fragment {
         mAddress = mView.findViewById(R.id.TextViewAddr);
         mEmail = mView.findViewById(R.id.TextViewEm);
         mEdit = mView.findViewById(R.id.ButtonEditFile);
-
+        Toast.makeText((MenuActivity)getActivity().getApplicationContext(), "Profile Fragment Created", Toast.LENGTH_SHORT).show();
 
         return mView;
     }
