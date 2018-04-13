@@ -21,22 +21,20 @@ import com.rjt.R;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    ProfileFragment mProfileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        Toolbar toolbar =  findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        FloatingActionButton fab =  findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        mProfileFragment = new ProfileFragment();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.add(R.id.fragmentContainer, mProfileFragment, "PROFILEKEY").commit();
+        // getSupportFragmentManager().executePendingTransactions();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -44,7 +42,7 @@ public class MenuActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView =  findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -85,28 +83,36 @@ public class MenuActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_user) {
+
+        } else if (id == R.id.nav_profile) {
             // Handle the camera action
-            Toast.makeText(this, "You chose User navigation", Toast.LENGTH_SHORT).show();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            ProfileFragment profileFragment = new ProfileFragment();
-            transaction.add(R.id.fragmentContainer, profileFragment);
-            transaction.commit();
-        } else if (id == R.id.nav_profile) {
+            transaction.add(R.id.fragmentContainer, mProfileFragment, "PROFILEKEY").commit();
 
-            //Toast.makeText(this, "You chose Profile navigation", Toast.LENGTH_SHORT).show();
+//            final ProfileFragment pf = (ProfileFragment)getSupportFragmentManager().findFragmentByTag("PROFILEKEY");
+//            pf.setOnPrfofileListener(new onProfileFragmentChosenListener() {
+//                @Override
+//                public void onProfileFragmentInteraction(String lname, String fname, String mobile, String email, String address) {
+//                    pf.setProfie("james", "989888930");
+//                }
+//            });
         } else if (id == R.id.nav_order) {
             Toast.makeText(this, "You chose Order navigation", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_shop) {
             Toast.makeText(this, "You chose Shop navigation", Toast.LENGTH_SHORT).show();
-        } else if(id == R.id.nav_logout){
+        } else if (id == R.id.nav_logout) {
             Toast.makeText(this, "You chose Log out", Toast.LENGTH_SHORT).show();
         }
 
-        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    public void initializeViewPager(){
+
     }
 }

@@ -1,6 +1,7 @@
 package com.rjt.android.ecommerce;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,14 +82,15 @@ public class SignUpActivity extends AppCompatActivity {
     {
         Log.d("SEND CUSTOMER", firstName + " "+lastName + " "+mobile);
         boolean requestRes = false;
-        String url = PublicUtility.getInstance().getRegistrationSite();
-        Log.d("URL:", url);
+        String registrationUrl = PublicUtility.getInstance().getRegistrationSite(firstName, lastName, mobile, address, email, password);
+        PublicUtility.getmSharedPreferenes().edit().putString(mobile, new Customer(firstName, lastName, email, mobile, address, password).getInfor().toString()).apply();
         StringRequest strreq = new StringRequest(Request.Method.POST,
-                url,
+                registrationUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String Response) {
                         // get response
+                        Log.d("Response", Response);
                         if(Response.contains("successfully")){
                             Log.d("Response", Response);
                             nontifyInformationIncomplete("You Successfully Registered Your account!");
@@ -105,19 +107,8 @@ public class SignUpActivity extends AppCompatActivity {
                 Log.e("HttpClient", "error: " + e.toString());
                 //return false;
             }
-        }) {
-            @Override
-            public Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("fname", firstName);
-                params.put("lname", lastName);
-                params.put("mobile", mobile);
-                params.put("address", address);
-                params.put("email", email);
-                params.put("password", password);
-                return params;
-            }
-        };
+        });
         mQueue.add(strreq);
     }
+
 }

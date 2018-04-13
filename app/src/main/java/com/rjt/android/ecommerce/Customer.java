@@ -8,18 +8,43 @@ public class Customer {
 	private String lastName;
 	private String email;
 	private String phoneNumber;
-	private String address;
-	private Cart cart;
-	public Customer(String firstName, String lastName, String email, String phoneNumber, String address) {
+	private String password;
+	private StringBuilder infor;
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Customer(String firstName, String lastName, String email, String phoneNumber, String address, String password) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
-		this.cart = new Cart();
+		this.password = password;
+		infor = new StringBuilder(firstName + "/" + lastName + "/" + email + "/" + phoneNumber + "/" + address + "/"+ password);
 	}
-	
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	private String address;
+
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	private String apiKey;
+	private String id;
+	private Cart cart;
+
+
+
 	public void buyProduct(Product product) {
 		this.cart.addProduct(product);
 	}
@@ -40,4 +65,8 @@ public class Customer {
 		}
 		return bill;
 	}
+
+    public StringBuilder getInfor(){
+      return infor;
+    }
 }
