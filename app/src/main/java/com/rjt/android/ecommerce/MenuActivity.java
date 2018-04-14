@@ -6,6 +6,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,26 +17,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.rjt.R;
 
+import java.util.ArrayList;
+
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ProfileFragment mProfileFragment;
-
+    DefaultHomeFragment mDefaultHomeFragment;
+    ViewPager mViewPager;
+    LinearLayout sliderDotspanel;
+    private int dotscount;
+    private ArrayList<String> mImageViews;
+    FragmentManager fragmentManager;
+    FragmentTransaction transaction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        mProfileFragment = new ProfileFragment();
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction transaction = fragmentManager.beginTransaction();
-//        transaction.add(R.id.fragmentContainer, mProfileFragment, "PROFILEKEY").commit();
-        // getSupportFragmentManager().executePendingTransactions();
+        ArrayList<String> al = PublicUtility.getImages();
+        Log.d("First Image Menu", al.get(0));
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        mDefaultHomeFragment = new DefaultHomeFragment();
+        transaction.add(R.id.fragmentContainer, mDefaultHomeFragment, "HOMEKEY").commit();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -87,17 +99,7 @@ public class MenuActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_profile) {
             // Handle the camera action
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.add(R.id.fragmentContainer, mProfileFragment, "PROFILEKEY").commit();
-
-//            final ProfileFragment pf = (ProfileFragment)getSupportFragmentManager().findFragmentByTag("PROFILEKEY");
-//            pf.setOnPrfofileListener(new onProfileFragmentChosenListener() {
-//                @Override
-//                public void onProfileFragmentInteraction(String lname, String fname, String mobile, String email, String address) {
-//                    pf.setProfie("james", "989888930");
-//                }
-//            });
         } else if (id == R.id.nav_order) {
             Toast.makeText(this, "You chose Order navigation", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_shop) {

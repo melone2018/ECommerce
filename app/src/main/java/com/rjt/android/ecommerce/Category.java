@@ -2,6 +2,9 @@ package com.rjt.android.ecommerce;
 
 public class Category {
     private String cid;
+    private String cname;
+    private String cdiscription;
+    private String cimegrl;
 
     public String getCid() {
         return cid;
@@ -42,9 +45,9 @@ public class Category {
         this.cimegrl = cimegrl;
     }
 
-    private String cname;
-    private String cdiscription;
-    private String cimegrl;
+    public String toString(){
+        return "cid" + this.cid + "/" +this.cname + "/" + this.cdiscription + "/" + this.cimegrl;
+    }
 
 
 }

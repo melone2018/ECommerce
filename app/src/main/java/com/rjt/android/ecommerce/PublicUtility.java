@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PublicUtility {
@@ -16,8 +17,8 @@ public class PublicUtility {
     private static List<Category> sCategories;
     private static String SharedFile;
 
-    public static void setCategories(List<Category> categories) {
-        sCategories = categories;
+    public static void setCategories(Category category) {
+        sCategories.add(category);
     }
 
     public static List<Category> getCategories() {
@@ -36,7 +37,7 @@ public class PublicUtility {
         PublicUtility.mSharedPreferenes = mSharedPreferenes;
     }
 
-    public static String getRegistrationSite(String fname, String lname, String address, String email, String mobile, String password) {
+    public static String getRegistrationSite(String fname, String lname, String mobile, String address, String email, String password) {
         return REGISTRATION_SITE + "fname="+fname+"&lname="+lname+"&address="+address+"&email="+email+"&mobile="+mobile+"&password="+password;
     }
 
@@ -59,6 +60,7 @@ public class PublicUtility {
     public static PublicUtility getInstance(){
         if(sPublicUtility==null)
         {
+            sCategories = new ArrayList<>();
             SharedFile = "Ecommerce";
             MOBILE_NUMBER_USED = "Mobile number not register";
             REGISTRATION_SITE = "http://rjtmobile.com/aamir/e-commerce/android-app/shop_reg.php?";
@@ -68,5 +70,13 @@ public class PublicUtility {
 
         }
         return sPublicUtility;
+    }
+
+    public static ArrayList<String> getImages(){
+        ArrayList<String> images = new ArrayList<>();
+        for(int i = 0; i < sCategories.size();i++){
+            images.add(sCategories.get(i).getCimegrl());
+        }
+        return images;
     }
 }

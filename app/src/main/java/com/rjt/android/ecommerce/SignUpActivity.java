@@ -83,6 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
         Log.d("SEND CUSTOMER", firstName + " "+lastName + " "+mobile);
         boolean requestRes = false;
         String registrationUrl = PublicUtility.getInstance().getRegistrationSite(firstName, lastName, mobile, address, email, password);
+        Log.d("Registration URL", registrationUrl);
         PublicUtility.getmSharedPreferenes().edit().putString(mobile, new Customer(firstName, lastName, email, mobile, address, password).getInfor().toString()).apply();
         StringRequest strreq = new StringRequest(Request.Method.POST,
                 registrationUrl,
@@ -104,7 +105,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError e) {
-                Log.e("HttpClient", "error: " + e.toString());
+                Log.e("Http Failed Sign Up", "error: " + e.toString());
                 //return false;
             }
         });

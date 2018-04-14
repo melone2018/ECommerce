@@ -54,7 +54,6 @@ public class SigninActivity extends AppCompatActivity {
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText et = mMobileTx;
                 String mobile = mMobileTx.getText().toString();
                 String password = mPasswordTx.getText().toString();
                 if (mobile.isEmpty() || password.isEmpty()) {
@@ -75,7 +74,8 @@ public class SigninActivity extends AppCompatActivity {
     }
 
     public void loginCustomer(final String mobile, final String password) {
-        String input = PublicUtility.getLOGINSITE(mobile, password);
+        //String input = PublicUtility.getLOGINSITE(mobile, password);
+        String input = "http://rjtmobile.com/aamir/e-commerce/android-app/shop_login.php?" + "mobile=" + mobile + "&password="+password;
         Log.d("URL", input);
         JsonArrayRequest jreq = new JsonArrayRequest(
                 input, new Response.Listener<JSONArray>() {
@@ -100,8 +100,8 @@ public class SigninActivity extends AppCompatActivity {
                     }
                     requestInternetResources(id, apiKey);
                     //PublicUtility.getmSharedPreferenes().edit().putString(mobile, new Customer(fname, lname, email, mobile, apiKey, id).toString()).apply();
-                    Intent intent = new Intent(SigninActivity.this, MenuActivity.class);
-                    startActivity(intent);
+                   // Intent intent = new Intent(SigninActivity.this, MenuActivity.class);
+                    //startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -109,7 +109,7 @@ public class SigninActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("HTTP ERROR", "ERROR!!!");
+                Log.d("LOGIN HTTP ERROR", "ERROR!!!");
             }
         });
         mRequestQueue.add(jreq);
@@ -120,7 +120,7 @@ public class SigninActivity extends AppCompatActivity {
         //RequestQueue requestQueue = Volley.newRequestQueue(SigninActivity.this);
         String categoryUrl = PublicUtility.getCATEGORYSITE(id, apiKey);
         Log.d("Category", categoryUrl);
-        final List<Category> list = new ArrayList<>();
+        //final List<Category> list = new ArrayList<>();
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 categoryUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -132,7 +132,8 @@ public class SigninActivity extends AppCompatActivity {
                             JSONArray jsonArray = response.getJSONArray("category");
                             Log.d("LENGTH", Integer.toString(jsonArray.length()));
                             for(int i = 0; i < jsonArray.length(); i++){
-                                JSONObject jsonObject = (JSONObject)jsonArray.get(i);
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                Log.d("jsonObject content", jsonObject.toString());
                                 Iterator<?> keys = jsonObject.keys();
                                 String cid = null;
                                 String cname=null;
@@ -152,9 +153,16 @@ public class SigninActivity extends AppCompatActivity {
                                         cimage = value;
                                     }
                                 }
-                                if(cid != null && cname!=null && cdiscription != null && cimage!=null)
-                                    list.add(new Category(cid, cname, cdiscription, cimage));
+
+                                if(cid != null && cname!=null && cdiscription != null && cimage!=null) {
+                                   Log.d("CONTENT","cid: " + cid + "\n cname: " + cname +" \ncdiscription: " + cdiscription + " \nimage: " + cimage);
+                                  PublicUtility.getmSharedPreferenes().edit().putString("cid"+cid, cname + "*" + cdiscription + "*" + cimage);
+                                   PublicUtility.setCategories(new Category(cid, cname, cdiscription, cimage));
+                                   // Log.d("LISTSIZE", Integer.toString(PublicUtility.getCategories().size()));
+                                }
                             }
+                           Intent intent = new Intent(SigninActivity.this, MenuActivity.class);
+                            startActivity(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -168,12 +176,8 @@ public class SigninActivity extends AppCompatActivity {
             }
         });
         mRequestQueue.add(jsonObjReq);
-        Log.d("Here", "Done Request");
-        PublicUtility.setCategories(list);
-        Log.d("List", Integer.toString(list.size()));
-        ListIterator<Category> iter = list.listIterator();
-        while(iter.hasNext()){
-            Log.d("cid:", iter.next().getCid());
+        for(int i = 0; i < PublicUtility.getImages().size(); i++){
+            Log.d("CHECK", PublicUtility.getImages().get(i));
         }
     }
 }
