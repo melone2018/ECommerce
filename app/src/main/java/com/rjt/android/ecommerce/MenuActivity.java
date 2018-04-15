@@ -28,25 +28,23 @@ import java.util.ArrayList;
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ProfileFragment mProfileFragment;
-    DefaultHomeFragment mDefaultHomeFragment;
     ViewPager mViewPager;
     LinearLayout sliderDotspanel;
     private int dotscount;
     private ArrayList<String> mImageViews;
-    FragmentManager fragmentManager;
     FragmentTransaction transaction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ArrayList<String> al = PublicUtility.getImages();
-        Log.d("First Image Menu", al.get(0));
-        fragmentManager = getSupportFragmentManager();
-        transaction = fragmentManager.beginTransaction();
-        mDefaultHomeFragment = new DefaultHomeFragment();
-        transaction.add(R.id.fragmentContainer, mDefaultHomeFragment, "HOMEKEY").commit();
+
+        getSupportFragmentManager().
+                beginTransaction().
+                add(R.id.fragmentContainer, new DefaultHomeFragment(), "HOMEKEY").
+                commit();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -54,8 +52,9 @@ public class MenuActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -95,15 +94,17 @@ public class MenuActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if (id == R.id.nav_user) {
-
-        } else if (id == R.id.nav_profile) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (id == R.id.nav_profile) {
             // Handle the camera action
-            transaction.add(R.id.fragmentContainer, mProfileFragment, "PROFILEKEY").commit();
+            Toast.makeText(this, "You cliked Profile", Toast.LENGTH_SHORT).show();
+            transaction.replace(R.id.fragmentContainer, new ProfileFragment()).commit();
         } else if (id == R.id.nav_order) {
-            Toast.makeText(this, "You chose Order navigation", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You cliked order", Toast.LENGTH_SHORT).show();
+            transaction.replace(R.id.fragmentContainer, new OrderFragment()).commit();
         } else if (id == R.id.nav_shop) {
             Toast.makeText(this, "You chose Shop navigation", Toast.LENGTH_SHORT).show();
+            transaction.replace(R.id.fragmentContainer, new ShopFragment()).commit();
         } else if (id == R.id.nav_logout) {
             Toast.makeText(this, "You chose Log out", Toast.LENGTH_SHORT).show();
         }
@@ -113,8 +114,7 @@ public class MenuActivity extends AppCompatActivity
         return true;
     }
 
-
-    public void initializeViewPager(){
+    public void initializeViewPager() {
 
     }
 }

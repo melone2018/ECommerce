@@ -10,54 +10,19 @@ import java.util.List;
 
 public class PublicUtility {
     private static PublicUtility sPublicUtility;
-    private static String REGISTRATION_SITE;
-    private static String LOGINSITE;
-    private static String CATEGORYSITE;
-    private static SharedPreferences mSharedPreferenes;
-    private static List<Category> sCategories;
-    private static String SharedFile;
-
-    public static void setCategories(Category category) {
-        sCategories.add(category);
-    }
-
-    public static List<Category> getCategories() {
-        return sCategories;
-    }
-
-    public static SharedPreferences getmSharedPreferenes() {
-        return mSharedPreferenes;
-    }
-
-    public static String getSharedFile() {
-        return SharedFile;
-    }
-
-    public static void setmSharedPreferenes(SharedPreferences mSharedPreferenes) {
-        PublicUtility.mSharedPreferenes = mSharedPreferenes;
-    }
-
-    public static String getRegistrationSite(String fname, String lname, String mobile, String address, String email, String password) {
-        return REGISTRATION_SITE + "fname="+fname+"&lname="+lname+"&address="+address+"&email="+email+"&mobile="+mobile+"&password="+password;
-    }
-
-    public static String getCATEGORYSITE(String id, String apiKey){
-        return CATEGORYSITE + "api_key="+apiKey + "&user_id="+id;
-    }
-    public static String getMobileNumberUsed() {
-        return MOBILE_NUMBER_USED;
-    }
-
-    private static String MOBILE_NUMBER_USED;
-    public static String getLOGINSITE(String mobile, String password) {
-        return LOGINSITE+ "mobile=" + mobile + "&password="+password;
-    }
+    private String REGISTRATION_SITE;
+    private String LOGINSITE;
+    private String CATEGORYSITE;
+    private SharedPreferences mSharedPreferenes;
+    private List<Category> sCategories;
+    private String SharedFile;
+    private String MOBILE_NUMBER_USED;
 
     public PublicUtility(){
 
     }
 
-    public static PublicUtility getInstance(){
+    public PublicUtility getInstance(){
         if(sPublicUtility==null)
         {
             sCategories = new ArrayList<>();
@@ -72,7 +37,44 @@ public class PublicUtility {
         return sPublicUtility;
     }
 
-    public static ArrayList<String> getImages(){
+
+    public void setCategories(Category category) {
+        sCategories.add(category);
+    }
+
+    public List<Category> getCategories() {
+        return sCategories;
+    }
+
+    public SharedPreferences getmSharedPreferenes() {
+        return mSharedPreferenes;
+    }
+
+    public String getSharedFile() {
+        return SharedFile;
+    }
+
+    public void setmSharedPreferenes(SharedPreferences mSharedPreferenes) {
+        this.mSharedPreferenes = mSharedPreferenes;
+    }
+
+    public String getRegistrationSite(String fname, String lname, String mobile, String address, String email, String password) {
+        return REGISTRATION_SITE + "fname="+fname+"&lname="+lname+"&address="+address+"&email="+email+"&mobile="+mobile+"&password="+password;
+    }
+
+    public String getCATEGORYSITE(String id, String apiKey){
+        return CATEGORYSITE + "api_key="+apiKey + "&user_id="+id;
+    }
+    public String getMobileNumberUsed() {
+        return MOBILE_NUMBER_USED;
+    }
+
+    public  String getLOGINSITE(String mobile, String password) {
+        return LOGINSITE+ "mobile=" + mobile + "&password="+password;
+    }
+
+
+    public ArrayList<String> getImages(){
         ArrayList<String> images = new ArrayList<>();
         for(int i = 0; i < sCategories.size();i++){
             images.add(sCategories.get(i).getCimegrl());

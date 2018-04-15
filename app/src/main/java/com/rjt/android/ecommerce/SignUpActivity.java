@@ -1,6 +1,7 @@
 package com.rjt.android.ecommerce;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,11 +33,14 @@ public class SignUpActivity extends AppCompatActivity {
     private Button mSignUp;
     private RequestQueue mQueue;
     private Button mLoginAccount;
+    SharedPreferences sp;
+    String REGURL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
+        REGURL= "http://rjtmobile.com/aamir/e-commerce/android-app/shop_reg.php?";
+        sp = getSharedPreferences("ecommerce", MODE_PRIVATE);
         mFirstName = findViewById(R.id.EditTextFirstName);
         mLastName = findViewById(R.id.EditTextLastName);
         mMobileNum = findViewById(R.id.EditTextMobile);
@@ -82,9 +86,12 @@ public class SignUpActivity extends AppCompatActivity {
     {
         Log.d("SEND CUSTOMER", firstName + " "+lastName + " "+mobile);
         boolean requestRes = false;
-        String registrationUrl = PublicUtility.getInstance().getRegistrationSite(firstName, lastName, mobile, address, email, password);
+        PublicUtility pub = new PublicUtility();
+        //String registrationUrl = pub.getInstance().getRegistrationSite(firstName, lastName, mobile, address, email, password);
+        String registrationUrl = REGURL+"fname="+firstName + "&lname="+lastName+"&address="+address+"&email="+email+"&mobile="+mobile+"&password="+password;
         Log.d("Registration URL", registrationUrl);
-        PublicUtility.getmSharedPreferenes().edit().putString(mobile, new Customer(firstName, lastName, email, mobile, address, password).getInfor().toString()).apply();
+       // pub.getmSharedPreferenes().edit().putString(mobile, new Customer(firstName, lastName, email, mobile, address, password).getInfor().toString()).apply();
+        getSharedPreferences("ecommerce", MODE_PRIVATE).edit().putString(mobile, password).apply();
         StringRequest strreq = new StringRequest(Request.Method.POST,
                 registrationUrl,
                 new Response.Listener<String>() {
@@ -96,7 +103,7 @@ public class SignUpActivity extends AppCompatActivity {
                             Log.d("Response", Response);
                             nontifyInformationIncomplete("You Successfully Registered Your account!");
                             Intent intent = new Intent(SignUpActivity.this, MenuActivity.class);
-                            startActivity(intent);
+                            //startActivity(intent);
                         }
                         if(Response.contains("Mobile number already exsist")){
                             nontifyInformationIncomplete("This phone number has been used, please change to another one.");

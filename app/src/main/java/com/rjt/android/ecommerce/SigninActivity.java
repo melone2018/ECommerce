@@ -2,6 +2,7 @@ package com.rjt.android.ecommerce;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,13 +40,18 @@ public class SigninActivity extends AppCompatActivity {
     EditText mMobileTx;
     EditText mPasswordTx;
     Button mLoginBtn;
+    String CURL;
     RequestQueue mRequestQueue;
     Button mButtonWantAccount;
-
+    SharedPreferences pb;
+    PublicUtility publicResource;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
+        pb = getSharedPreferences("ecommerce", 0);
+        CURL = "http://rjtmobile.com/ansari/shopingcart/androidapp/cust_category.php?";
+        publicResource = new PublicUtility().getInstance();
         mMobileTx = findViewById(R.id.EditTextSignInPhone);
         mPasswordTx = findViewById(R.id.EditTextSignInPw);
         mRequestQueue = Volley.newRequestQueue(this);
@@ -76,7 +82,7 @@ public class SigninActivity extends AppCompatActivity {
     public void loginCustomer(final String mobile, final String password) {
         //String input = PublicUtility.getLOGINSITE(mobile, password);
         String input = "http://rjtmobile.com/aamir/e-commerce/android-app/shop_login.php?" + "mobile=" + mobile + "&password="+password;
-        Log.d("URL", input);
+        Log.d("URLLOGIN", input);
         JsonArrayRequest jreq = new JsonArrayRequest(
                 input, new Response.Listener<JSONArray>() {
             @Override
@@ -90,18 +96,18 @@ public class SigninActivity extends AppCompatActivity {
                     String apiKey = jo.getString("appapikey ");
                     String id = jo.getString("id");
                     Log.d("JSON", mobile + " " + fname + " "+lname + " "+apiKey);
-                    if(PublicUtility.getmSharedPreferenes().contains(mobile)){
-                        String userInfo = PublicUtility.getmSharedPreferenes().getString(mobile, null);
-                        userInfo = userInfo + "/" + id + "/" + apiKey;
-                        PublicUtility.getmSharedPreferenes().edit().putString(mobile, userInfo).apply();
-                    }else{
-                        String userInfo = fname + "/" + lname + "/" + email + "/" + mobile + "/" + apiKey + "/" + id;
-                        PublicUtility.getmSharedPreferenes().edit().putString(mobile, userInfo).apply();
-                    }
+//                    if(pb.contains(mobile)){
+//                        String userInfo = publicResource.getmSharedPreferenes().getString(mobile, null);
+//                        userInfo = userInfo + "/" + id + "/" + apiKey;
+//                        publicResource.getmSharedPreferenes().edit().putString(mobile, userInfo).apply();
+//                    }else{
+//                        String userInfo = fname + "/" + lname + "/" + email + "/" + mobile + "/" + apiKey + "/" + id;
+//                        publicResource.getmSharedPreferenes().edit().putString(mobile, userInfo).apply();
+//                    }
                     requestInternetResources(id, apiKey);
                     //PublicUtility.getmSharedPreferenes().edit().putString(mobile, new Customer(fname, lname, email, mobile, apiKey, id).toString()).apply();
-                   // Intent intent = new Intent(SigninActivity.this, MenuActivity.class);
-                    //startActivity(intent);
+                    Intent intent = new Intent(SigninActivity.this, MenuActivity.class);
+                   // startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -118,28 +124,28 @@ public class SigninActivity extends AppCompatActivity {
     public void requestInternetResources(String id, String apiKey){
         final Map<String, ArrayList<String>> categoryMap = new HashMap<>();
         //RequestQueue requestQueue = Volley.newRequestQueue(SigninActivity.this);
-        String categoryUrl = PublicUtility.getCATEGORYSITE(id, apiKey);
+        String categoryUrl = CURL + "api_key=" +apiKey + "&user_id=" + id;
         Log.d("Category", categoryUrl);
         //final List<Category> list = new ArrayList<>();
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 categoryUrl, null,
                 new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                       Log.d("JSON", "Done Request");
-                       Log.d("JSON REsponse", response.toString());
+                    public void onResponse(JSONObject response)
+                    {
                         try {
                             JSONArray jsonArray = response.getJSONArray("category");
                             Log.d("LENGTH", Integer.toString(jsonArray.length()));
+                            ArrayList<String> images = new ArrayList<>();
                             for(int i = 0; i < jsonArray.length(); i++){
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                Log.d("jsonObject content", jsonObject.toString());
+                                Log.d("OBJECTCONTENT", jsonObject.toString());
                                 Iterator<?> keys = jsonObject.keys();
                                 String cid = null;
                                 String cname=null;
                                 String cdiscription=null;
                                 String cimage=null;
-                                int count = 0;
+                                //String tmpImage;
                                 while(keys.hasNext()){
                                     String key = (String)keys.next();
                                     String value = jsonObject.getString(key);
@@ -155,13 +161,19 @@ public class SigninActivity extends AppCompatActivity {
                                 }
 
                                 if(cid != null && cname!=null && cdiscription != null && cimage!=null) {
-                                   Log.d("CONTENT","cid: " + cid + "\n cname: " + cname +" \ncdiscription: " + cdiscription + " \nimage: " + cimage);
-                                  PublicUtility.getmSharedPreferenes().edit().putString("cid"+cid, cname + "*" + cdiscription + "*" + cimage);
-                                   PublicUtility.setCategories(new Category(cid, cname, cdiscription, cimage));
+                                   //Log.d("CONTENT","cid: " + cid + "\n cname: " + cname +" \ncdiscription: " + cdiscription + " \nimage: " + cimage);
+                                   images.add(cimage);
+                                   pb.edit().putString("cid"+cid, cimage).apply();
+                                  // publicResource.getmSharedPreferenes().edit().putString("cid"+cid, cname + "*" + cdiscription + "*" + cimage).apply();
+                                  // publicResource.setCategories(new Category(cid, cname, cdiscription, cimage));
                                    // Log.d("LISTSIZE", Integer.toString(PublicUtility.getCategories().size()));
                                 }
                             }
-                           Intent intent = new Intent(SigninActivity.this, MenuActivity.class);
+                            Intent intent = new Intent(SigninActivity.this, MenuActivity.class);
+                            Log.d("SENDIAMGE", images.size()+"");
+                            Bundle b = new Bundle();
+                            b.putStringArrayList("IMAGES", images);
+                            intent.putExtra("IMAGES", b);
                             startActivity(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -172,12 +184,14 @@ public class SigninActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("HTTP ", "Failed ");
+                Log.d("HTTP909", "Failed ");
             }
         });
         mRequestQueue.add(jsonObjReq);
-        for(int i = 0; i < PublicUtility.getImages().size(); i++){
-            Log.d("CHECK", PublicUtility.getImages().get(i));
-        }
+
+//        Map<String, ?> allEntries = pb.getAll();
+//        String s = pb.getString("cid107", null);
+//        Log.d("CID107I", s);
     }
+
 }

@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="First Name"/>
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -48,8 +48,7 @@
             android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Last Name"/>
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
@@ -69,8 +68,7 @@
             android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Address"/>
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
@@ -90,8 +88,7 @@
             android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Email"/>
+            android:layout_weight="1" />
     </LinearLayout>
 
     <Button

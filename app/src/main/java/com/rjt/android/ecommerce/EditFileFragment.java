@@ -1,12 +1,16 @@
 package com.rjt.android.ecommerce;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.rjt.R;
 
@@ -28,7 +32,8 @@ public class EditFileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    EditText fnameTx, lnameTx, addrTx, emailTx;
+    Button saveBtn;
     private OnFragmentInteractionListener mListener;
 
     public EditFileFragment() {
@@ -66,7 +71,25 @@ public class EditFileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_file, container, false);
+        View mView = inflater.inflate(R.layout.fragment_edit_file, container, false);
+        fnameTx = mView.findViewById(R.id.EditTextFirstNameChange);
+        lnameTx = mView.findViewById(R.id.EditTextLastNameChange);
+        emailTx = mView.findViewById(R.id.EditTextEmailChange);
+        addrTx = mView.findViewById(R.id.EditTextAddressChange);
+        saveBtn = mView.findViewById(R.id.ButtonSave);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fnameTx.getText().toString().isEmpty() || lnameTx.getText().toString().isEmpty() ||
+                        emailTx.getText().toString().isEmpty() || addrTx.getText().toString().isEmpty()){
+                    Toast.makeText(getActivity(), "No field can be blank", Toast.LENGTH_LONG).show();
+                }else{
+                    Intent intent = new Intent(getActivity(), MenuActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        return mView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

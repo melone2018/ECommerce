@@ -3,13 +3,9 @@ package com.rjt.android.ecommerce;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +17,7 @@ import com.rjt.R;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class DefaultHomeFragment extends Fragment {
-
+public class ShopFragment extends Fragment {
     private ViewPager mViewPager;
     private View mView;
     private LinearLayout sliderDotspanel;
@@ -52,7 +47,7 @@ public class DefaultHomeFragment extends Fragment {
 //        mLayoutManager = new StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL);
         //mRecyclerView.setLayoutManager(mLayoutManager);
 //        Log.d("IMG", mImageViews.size()+"");
-         mAdapter = new CustomRecyclerViewAdapter(getActivity(), mImageViews);
+        mAdapter = new CustomRecyclerViewAdapter(getActivity(), mImageViews);
         mRecyclerView.setAdapter(mAdapter);
 
 //        mViewPager = mView.findViewById(R.id.viewPager);
@@ -61,8 +56,8 @@ public class DefaultHomeFragment extends Fragment {
 //        mViewPager.setAdapter(viewPagerAdapter);
 //        mDotscount = viewPagerAdapter.getCount();
 //        dots = new ImageView[mDotscount];
-       //initializeView();
-       // mRecyclerView.addView(mViewPager);
+        //initializeView();
+        // mRecyclerView.addView(mViewPager);
         return mView;
     }
 

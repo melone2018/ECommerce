@@ -24,7 +24,6 @@ public class ViewPagerAdapter extends PagerAdapter {
     public ViewPagerAdapter(Context context, ArrayList<String> images){
         this.context = context;
         this.images = images;
-        Log.d("IMAGESIZE", images.size()+"");
     }
     @Override
     public int getCount() {
@@ -49,7 +48,6 @@ public class ViewPagerAdapter extends PagerAdapter {
                 .fit()
                 .centerCrop()
                 .into(img);
-        //((ViewPager)container).addView(view);
 
         if(view.getParent()!=null)
             ((ViewGroup)view.getParent()).removeView(view); // <- fix
