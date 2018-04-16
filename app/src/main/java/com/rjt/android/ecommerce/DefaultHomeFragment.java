@@ -15,14 +15,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.rjt.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
-public class DefaultHomeFragment extends Fragment {
 
+public class DefaultHomeFragment extends Fragment implements MenuActivity.onReceiveUserInfoListener {
     private ViewPager mViewPager;
     private View mView;
     private LinearLayout sliderDotspanel;
@@ -31,74 +43,100 @@ public class DefaultHomeFragment extends Fragment {
     private CustomRecyclerViewAdapter mAdapter;
     private int mDotscount;
     private ImageView[] dots;
+    private String apiKey;
+    private String userId;
+    private String mobile;
+    private SharedPreferences pb;
+    private RequestQueue mRequestQueue;
+    private String password;
     private ArrayList<String> mImageViews = new ArrayList<>();
-
+    private ArrayList<String> mImageIds = new ArrayList<>();
+//    private ArrayList<String> subImageViews;
+//    private ArrayList<String> subImageIds;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView =  inflater.inflate(R.layout.default_home, container, false);
+        mView = inflater.inflate(R.layout.default_home, container, false);
         //mRecyclerView =  mView.findViewById(R.id.recyclerView);
+        mRequestQueue = Volley.newRequestQueue(getActivity());
+        final ArrayList<String> subImageViews = new ArrayList<>();
+        final ArrayList<String> subImageIds = new ArrayList<>();
 
-        SharedPreferences pb = getActivity().getSharedPreferences("ecommerce", 0);
+        pb = getActivity().getSharedPreferences("ecommerce", 0);
         Map<String, ?> allEntries = pb.getAll();
-        for(Map.Entry<String, ?> entry : allEntries.entrySet()){
-            mImageViews.add(entry.getValue().toString());
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            if (entry.getKey().substring(0, 3).equals("cid")) {
+                mImageViews.add(entry.getValue().toString());
+                mImageIds.add(entry.getKey().substring(3, 6));
+            }
         }
         mRecyclerView = mView.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        mLayoutManager = new StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL);
-        //mRecyclerView.setLayoutManager(mLayoutManager);
-//        Log.d("IMG", mImageViews.size()+"");
-         mAdapter = new CustomRecyclerViewAdapter(getActivity(), mImageViews);
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mAdapter = new CustomRecyclerViewAdapter(getActivity(), mImageViews);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setListener(new CategoryClickListener() {
+            @Override
+            public void onCategoryClick(View v, int position) {
+                Log.d("Position", (position - 1) + "");
+                Toast.makeText(getActivity(), mImageViews.get(position - 1), Toast.LENGTH_SHORT).show();
+                String categoryId = mImageIds.get(position - 1);
+                ArrayList<String> subImageViews = new ArrayList<>();
+                ArrayList<String> subImageIds = new ArrayList<>();
+                requestCategory(categoryId, subImageIds, subImageViews);
+            }
+        });
 
-//        mViewPager = mView.findViewById(R.id.viewPager);
-//        sliderDotspanel = mView.findViewById(R.id.SliderDots);
-//        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getActivity(), mImageViews);
-//        mViewPager.setAdapter(viewPagerAdapter);
-//        mDotscount = viewPagerAdapter.getCount();
-//        dots = new ImageView[mDotscount];
-       //initializeView();
-       // mRecyclerView.addView(mViewPager);
         return mView;
     }
 
-//    public void initializeView()
-//    {
-//        for (int i = 0; i < mDotscount; i++) {
-//            dots[i] = new ImageView(getActivity());
-//            dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.nonactive_dot));
-//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//
-//            params.setMargins(10, 0, 10, 0);
-//
-//            sliderDotspanel.addView(dots[i], params);
-//        }
-//        dots[0].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
-//
-//        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//
-//                for(int i = 0; i< mDotscount; i++){
-//                    dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.nonactive_dot));
-//                }
-//
-//                dots[position].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
-//
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
-//    }
+    @Override
+    public void onUserInfoReceived(String mobile, String password, String apiKey, String userId) {
+        this.mobile = mobile;
+        this.userId = userId;
+        this.apiKey = apiKey;
+        this.password = password;
+    }
+
+    public void requestCategory(String categoryId, final ArrayList<String> subImageIds, final ArrayList<String> subImageViews) {
+        String sub_cateory_url = "http://rjtmobile.com/ansari/shopingcart/androidapp/cust_sub_category.php?Id="
+                + categoryId + "&api_key=" + apiKey + "&user_id=" + userId;
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                sub_cateory_url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("subcategory");
+                            ArrayList<String> images = new ArrayList<>();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String scid = jsonObject.getString("scid");
+                                String cname = jsonObject.getString("scname");
+                                String sdiscription = jsonObject.getString("scdiscription");
+                                String cimage = jsonObject.getString("scimageurl");
+
+                                pb.edit().putString("scid" + scid, cimage).apply();
+                                subImageIds.add(scid);
+                                subImageViews.add(cimage);
+                            }
+                            mAdapter.setImageData(subImageViews);
+                            mAdapter.notifyDataSetChanged();
+                            Log.d("SUBImageIds", subImageIds.size() + "");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("HTTP909", "Failed ");
+            }
+        });
+        mRequestQueue.add(jsonObjReq);
+    }
 }

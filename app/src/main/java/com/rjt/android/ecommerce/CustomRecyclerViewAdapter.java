@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rjt.R;
 import com.squareup.picasso.Picasso;
@@ -26,19 +28,26 @@ public class CustomRecyclerViewAdapter extends RecyclerView
     private View mHeaderView;
     private Context context;
     private int mDotscount;
-    private ImageView[] dots;
+
+    private CategoryClickListener listener;
     private ArrayList<String> mImageViews = new ArrayList<>();
-    private LinearLayout sliderDotspanel;
+
+    public void setImageData(ArrayList<String> imageData) {
+        this.imageData = imageData;
+    }
+
     private ArrayList<String> imageData;
     private AdapterView.OnItemClickListener onItemClickListener;
     private AdapterView.OnItemLongClickListener onItemLongClickListener;
 
+    public void setListener(CategoryClickListener listener) {
+        this.listener = listener;
+    }
 
     public CustomRecyclerViewAdapter(Context context, ArrayList<String> imageData) {
         this.imageData = imageData;
         this.context = context;
         this.mDotscount = imageData.size();
-        this.dots = new ImageView[this.mDotscount];
 
     }
 
@@ -80,21 +89,24 @@ public class CustomRecyclerViewAdapter extends RecyclerView
             return new HeaderViewHolder(layout);
         }
         View layout = LayoutInflater.from(context).inflate(R.layout.item_normal, parent, false);
-
         return new NormalViewHolder(layout);
+    }
+
+    @Override
+    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+        if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+            StaggeredGridLayoutManager.LayoutParams slp = (StaggeredGridLayoutManager.LayoutParams) lp;
+            slp.setFullSpan(holder.getLayoutPosition() == 0);
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof HeaderViewHolder) {
-                sliderDotspanel = ((HeaderViewHolder) holder).headerVp.findViewById(R.id.SliderDots);
                 ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(context, imageData);
                 ((HeaderViewHolder) holder).headerVp.setAdapter(viewPagerAdapter);
-//                mDotscount = viewPagerAdapter.getCount();
-//                dots = new ImageView[mDotscount];
-//                ((HeaderViewHolder) holder).dotLl.addView(new ImageView(context));
-//                initializeView(((HeaderViewHolder) holder).headerVp, ((HeaderViewHolder) holder).dotLl);
-                //mRecyclerView.addView(mViewPager);
             } else if (holder instanceof NormalViewHolder) {
                 //((NormalViewHolder) holder).itemView.(position + "");
                 ImageView imgView = ((NormalViewHolder)holder).imgView;
@@ -103,57 +115,49 @@ public class CustomRecyclerViewAdapter extends RecyclerView
                         .fit()
                         .centerCrop()
                         .into(imgView);
+                ((NormalViewHolder)holder).itemView.setTag(position-1);
             }
-
     }
 
-    public void initializeView(ViewPager headerVp, LinearLayout dotContainer) {
-//        for (int i = 0; i < mDotscount; i++) {
-//            dots[i] = new ImageView(context);
-//            dots[i].setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.nonactive_dot));
-//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//    public void initializeView(ViewPager headerVp, LinearLayout dotContainer) {
 //
-//            params.setMargins(10, 0, 10, 0);
+//        ImageView dots = new ImageView(context);
+//        dots.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.nonactive_dot));
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 //
-//            sliderDotspanel.addView(dots[i], params);
-//        }
-        ImageView dots = new ImageView(context);
-        dots.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.nonactive_dot));
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        params.setMargins(10, 0, 10, 0);
-        dotContainer.addView(dots, params);
-        //        dots[0].setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.active_dot));
-
-        headerVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-//                for(int i = 0; i< mDotscount; i++){
-//                    dots[i].setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.nonactive_dot));
-//                }
-//                dots[position].setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.active_dot));
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-    }
+//        params.setMargins(10, 0, 10, 0);
+//        dotContainer.addView(dots, params);
+//        //        dots[0].setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.active_dot));
+//
+//        headerVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+////                for(int i = 0; i< mDotscount; i++){
+////                    dots[i].setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.nonactive_dot));
+////                }
+////                dots[position].setImageDrawable(ContextCompat.getDrawable(context.getApplicationContext(), R.drawable.active_dot));
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
+//    }
 
     @Override
     public int getItemCount() {
-        if(mHeaderView==null)
-            return imageData.size();
-        else
-            return imageData.size() + 1;
-        //return 10;
-    }
+//        if(mHeaderView==null)
+//            return imageData.size();
+//        else
+            return imageData.size()+1;
+    //return 10;
+}
 
     @Override
     public int getItemViewType(int position) {
@@ -188,7 +192,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView
         }
     }
 
-    public class NormalViewHolder extends RecyclerView.ViewHolder {
+    public class NormalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         //        private ImageView categoryIv;
         private ImageView imgView;
 
@@ -196,7 +200,12 @@ public class CustomRecyclerViewAdapter extends RecyclerView
             super(itemView);
 //            categoryIv = itemView.findViewById(R.id.ivItemGridImage);
             imgView = itemView.findViewById(R.id.imageView);
-
+            itemView.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(context, "Image clicked. ", Toast.LENGTH_SHORT).show();
+            listener.onCategoryClick(v, getLayoutPosition());
         }
     }
 }

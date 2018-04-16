@@ -4,6 +4,7 @@
 //import android.content.Context;
 //import android.graphics.BitmapFactory;
 //import android.graphics.Point;
+//import android.support.v4.view.ViewPager;
 //import android.support.v7.widget.RecyclerView;
 //import android.view.Display;
 //import android.view.LayoutInflater;
@@ -11,13 +12,16 @@
 //import android.view.ViewGroup;
 //import android.view.WindowManager;
 //import android.widget.ImageView;
+//import android.widget.LinearLayout;
 //
 //import com.squareup.picasso.Picasso;
 //import com.rjt.R;
 //
 //import java.util.ArrayList;
 //
-//public class StaggeredGridLayoutAdapter extends CustomRecyclerViewAdapter {
+//public class StaggeredGridLayoutAdapter extends RecyclerView
+//        .Adapter<RecyclerView.ViewHolder>
+//{
 //    private Activity activity;
 //    private ArrayList<String> images;
 //    private int screenWidth;
@@ -64,12 +68,57 @@
 //                .into((myHolder.images));
 //    }
 //
-//    public class Holder extends NormalViewHolder {
-//        private ImageView images;
+//    @Override
+//    public int getItemCount() {
+//        if(mHeaderView==null)
+//            return imageData.size();
+//        else
+//            return imageData.size() + 1;
+//        //return 10;
+//    }
 //
-//        public Holder(View itemView) {
+//    @Override
+//    public int getItemViewType(int position) {
+//
+//        if (position == 0) {
+//            return TYPE_HEADER;
+//        }
+//        return TYPE_NORMAL;
+//    }
+//
+//    public class HeaderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+//        private ViewPager headerVp;
+//        private LinearLayout dotLl;
+//
+//        public HeaderViewHolder(View itemView) {
 //            super(itemView);
-//            images = itemView.findViewById(R.id.ivItemGridImage);
+//            headerVp = itemView.findViewById(R.id.viewPager);
+//            dotLl = itemView.findViewById(R.id.SliderDots);
+//            itemView.setOnClickListener(this);
+//            itemView.setOnLongClickListener(this);
+//        }
+//
+//        @Override
+//        public void onClick(View v) {
+//            onItemHolderClick(this);
+//        }
+//
+//        @Override
+//        public boolean onLongClick(View v) {
+//            onItemHolderLongClick(this);
+//            return true;
+//        }
+//    }
+//
+//    public class NormalViewHolder extends RecyclerView.ViewHolder {
+//        //        private ImageView categoryIv;
+//        private ImageView imgView;
+//
+//        public NormalViewHolder(View itemView) {
+//            super(itemView);
+////            categoryIv = itemView.findViewById(R.id.ivItemGridImage);
+//            imgView = itemView.findViewById(R.id.imageView);
+//
 //        }
 //    }
 //}

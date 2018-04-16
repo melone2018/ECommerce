@@ -33,6 +33,7 @@ public class MenuActivity extends AppCompatActivity
     private int dotscount;
     private ArrayList<String> mImageViews;
     FragmentTransaction transaction;
+    private onReceiveUserInfoListener inforListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +42,25 @@ public class MenuActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        String[] userInfo = new String[]{};
+        userInfo = getIntent().getExtras().getStringArray("USERINFO");
+        Log.d("ID:", userInfo[0]);
+        Log.d("PW:", userInfo[1]);
+        Log.d("API", userInfo[2]);
+        String mobile = userInfo[0];
+        String userPw = userInfo[1];
+        String apiKey = userInfo[2];
+        String userId = userInfo[3];
+        Log.d("MOBILE", mobile);
+        Log.d("PASSWORD", userPw);
+        Log.d("APIKEY", apiKey);
+        Log.d("USERID", userId);
+        DefaultHomeFragment homeFragment = new DefaultHomeFragment();
+        inforListener = (onReceiveUserInfoListener)homeFragment;
+        inforListener.onUserInfoReceived(mobile, userPw, apiKey, userId);
         getSupportFragmentManager().
                 beginTransaction().
-                add(R.id.fragmentContainer, new DefaultHomeFragment(), "HOMEKEY").
+                add(R.id.fragmentContainer, homeFragment, "HOMEKEY").
                 commit();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -113,6 +130,10 @@ public class MenuActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    public interface onReceiveUserInfoListener{
+        public void onUserInfoReceived(String mobile, String password, String apiKey, String userId);
+    }
+
 
     public void initializeViewPager() {
 

@@ -96,18 +96,15 @@ public class SigninActivity extends AppCompatActivity {
                     String apiKey = jo.getString("appapikey ");
                     String id = jo.getString("id");
                     Log.d("JSON", mobile + " " + fname + " "+lname + " "+apiKey);
-//                    if(pb.contains(mobile)){
-//                        String userInfo = publicResource.getmSharedPreferenes().getString(mobile, null);
-//                        userInfo = userInfo + "/" + id + "/" + apiKey;
-//                        publicResource.getmSharedPreferenes().edit().putString(mobile, userInfo).apply();
-//                    }else{
-//                        String userInfo = fname + "/" + lname + "/" + email + "/" + mobile + "/" + apiKey + "/" + id;
-//                        publicResource.getmSharedPreferenes().edit().putString(mobile, userInfo).apply();
-//                    }
+                    pb.edit().putString(id, password + " " + apiKey).apply();
                     requestInternetResources(id, apiKey);
                     //PublicUtility.getmSharedPreferenes().edit().putString(mobile, new Customer(fname, lname, email, mobile, apiKey, id).toString()).apply();
                     Intent intent = new Intent(SigninActivity.this, MenuActivity.class);
-                   // startActivity(intent);
+                    Bundle bundle = new Bundle();
+                    String[] userInfo = new String[]{mobile, password, apiKey, id};
+                    bundle.putStringArray("USERINFO", userInfo);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -139,7 +136,6 @@ public class SigninActivity extends AppCompatActivity {
                             ArrayList<String> images = new ArrayList<>();
                             for(int i = 0; i < jsonArray.length(); i++){
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                Log.d("OBJECTCONTENT", jsonObject.toString());
                                 Iterator<?> keys = jsonObject.keys();
                                 String cid = null;
                                 String cname=null;
@@ -161,20 +157,10 @@ public class SigninActivity extends AppCompatActivity {
                                 }
 
                                 if(cid != null && cname!=null && cdiscription != null && cimage!=null) {
-                                   //Log.d("CONTENT","cid: " + cid + "\n cname: " + cname +" \ncdiscription: " + cdiscription + " \nimage: " + cimage);
                                    images.add(cimage);
                                    pb.edit().putString("cid"+cid, cimage).apply();
-                                  // publicResource.getmSharedPreferenes().edit().putString("cid"+cid, cname + "*" + cdiscription + "*" + cimage).apply();
-                                  // publicResource.setCategories(new Category(cid, cname, cdiscription, cimage));
-                                   // Log.d("LISTSIZE", Integer.toString(PublicUtility.getCategories().size()));
                                 }
                             }
-                            Intent intent = new Intent(SigninActivity.this, MenuActivity.class);
-                            Log.d("SENDIAMGE", images.size()+"");
-                            Bundle b = new Bundle();
-                            b.putStringArrayList("IMAGES", images);
-                            intent.putExtra("IMAGES", b);
-                            startActivity(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -8,6 +8,7 @@ public abstract class Product {
 	private Boolean isOnSale;
 	private Boolean isTopSeller;
 	private String productId;
+	private String imageUrl;
 	public double getPrice() {
 		return price;
 	}
@@ -49,5 +50,9 @@ public abstract class Product {
 	}
 	public void setProductId(String productId) {
 		this.productId = productId;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
 	}
 }

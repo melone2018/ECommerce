@@ -27,6 +27,7 @@ public class ShopFragment extends Fragment {
     private int mDotscount;
     private ImageView[] dots;
     private ArrayList<String> mImageViews = new ArrayList<>();
+    private ArrayList<String> mImageIds = new ArrayList<>();
 
 
     @Override
@@ -40,6 +41,7 @@ public class ShopFragment extends Fragment {
         Map<String, ?> allEntries = pb.getAll();
         for(Map.Entry<String, ?> entry : allEntries.entrySet()){
             mImageViews.add(entry.getValue().toString());
+            mImageIds.add(entry.getKey());
         }
         mRecyclerView = mView.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
