@@ -18,12 +18,20 @@ import java.util.ArrayList;
 
 public class ProductListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
+
+    public ArrayList<Product> getProducts() {
+        return mProducts;
+    }
+
     private ArrayList<Product> mProducts;
+    private ProductClickListener listener;
     public ProductListAdapter(Context context, ArrayList<Product> products){
         this.mContext = context;
         this.mProducts = products;
     }
-
+    public void setProductListener(ProductClickListener listener) {
+        this.listener = listener;
+    }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View mView = LayoutInflater.from(mContext).inflate(R.layout.product_item_layout, parent, false);
@@ -48,13 +56,19 @@ public class ProductListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return mProducts.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView productIv;
         private TextView namePriceTv;
         public MyViewHolder(View itemView) {
             super(itemView);
             this.productIv = itemView.findViewById(R.id.ImageViewProduct);
             this.namePriceTv = itemView.findViewById(R.id.TextViewNamePrice);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onProductClicked(v, getLayoutPosition());
         }
     }
 

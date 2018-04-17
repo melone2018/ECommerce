@@ -9,7 +9,7 @@
     </style>
 
     <style name="AppSplash" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/rjtlogo</item>
+        <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
     <style name="EditTextStyle">

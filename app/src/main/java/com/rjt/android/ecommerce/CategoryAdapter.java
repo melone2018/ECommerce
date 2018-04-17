@@ -1,28 +1,24 @@
 package com.rjt.android.ecommerce;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rjt.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class CustomRecyclerViewAdapter extends RecyclerView
-        .Adapter<RecyclerView.ViewHolder> {
+public class CategoryAdapter extends RecyclerView
+        .Adapter<RecyclerView.ViewHolder>{
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_NORMAL = 2;
     private Context context;
@@ -37,19 +33,19 @@ public class CustomRecyclerViewAdapter extends RecyclerView
     public void setListener(CategoryClickListener listener) {
         this.listener = listener;
     }
-    public CustomRecyclerViewAdapter(Context context, ArrayList<String> imageData) {
+    public CategoryAdapter(Context context, ArrayList<String> imageData) {
         this.imageData = imageData;
         this.context = context;
     }
 
-    private void onItemHolderClick(HeaderViewHolder itemHolder) {
+    private void onItemHolderClick(CategoryAdapter.HeaderViewHolder itemHolder) {
         if (onItemClickListener != null) {
             onItemClickListener.onItemClick(null, itemHolder.itemView,
                     itemHolder.getAdapterPosition(), itemHolder.getItemId());
         }
     }
 
-    private void onItemHolderLongClick(HeaderViewHolder itemHolder) {
+    private void onItemHolderLongClick(CategoryAdapter.HeaderViewHolder itemHolder) {
         if (onItemLongClickListener != null) {
             onItemLongClickListener.onItemLongClick(null, itemHolder.itemView,
                     itemHolder.getAdapterPosition(), itemHolder.getItemId());
@@ -60,10 +56,10 @@ public class CustomRecyclerViewAdapter extends RecyclerView
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEADER) {
             View layout = LayoutInflater.from(context).inflate(R.layout.my_view_pager, parent, false);
-            return new HeaderViewHolder(layout);
+            return new CategoryAdapter.HeaderViewHolder(layout);
         }
         View layout = LayoutInflater.from(context).inflate(R.layout.item_normal, parent, false);
-        return new NormalViewHolder(layout);
+        return new CategoryAdapter.NormalViewHolder(layout);
     }
 
     @Override
@@ -78,17 +74,17 @@ public class CustomRecyclerViewAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof HeaderViewHolder) {
+        if (holder instanceof CategoryAdapter.HeaderViewHolder) {
             ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(context, imageData);
-            ((HeaderViewHolder) holder).headerVp.setAdapter(viewPagerAdapter);
-        } else if (holder instanceof NormalViewHolder) {
-            ImageView imgView = ((NormalViewHolder) holder).imgView;
+            ((CategoryAdapter.HeaderViewHolder) holder).headerVp.setAdapter(viewPagerAdapter);
+        } else if (holder instanceof CategoryAdapter.NormalViewHolder) {
+            ImageView imgView = ((CategoryAdapter.NormalViewHolder) holder).imgView;
             Picasso.with(context)
                     .load(this.imageData.get(position - 1))
                     .fit()
                     .centerCrop()
                     .into(imgView);
-            ((NormalViewHolder) holder).itemView.setTag(position - 1);
+            ((CategoryAdapter.NormalViewHolder) holder).itemView.setTag(position - 1);
         }
     }
 

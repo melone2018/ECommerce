@@ -1,20 +1,32 @@
 package com.rjt.android.ecommerce;
 
-public abstract class Product {
-	private double price;
+public class Product {
+	private String price;
 	private String productName;
 	private int totalSale;
 	private String description;
 	private Boolean isOnSale;
 	private Boolean isTopSeller;
 	private String productId;
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    private String quantity;
 	private String imageUrl;
-	public double getPrice() {
+	public Product(String id, String pname, String quantity, String price, String image, String description){
+	    this.productId = id;
+	    this.productName = pname;
+	    this.quantity = quantity;
+	    this.price = price;
+	    this.description = description;
+	    this.imageUrl = image;
+    }
+	public String getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
-		this.price = price;
-	}
+
 	public String getProductName() {
 		return productName;
 	}

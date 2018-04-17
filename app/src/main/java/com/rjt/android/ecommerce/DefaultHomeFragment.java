@@ -1,12 +1,11 @@
 package com.rjt.android.ecommerce;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,39 +28,34 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
-
 public class DefaultHomeFragment extends Fragment implements MenuActivity.onReceiveUserInfoListener {
-    private ViewPager mViewPager;
     private View mView;
     private LinearLayout sliderDotspanel;
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
     private CustomRecyclerViewAdapter mAdapter;
-    private int mDotscount;
     private ImageView[] dots;
     private String apiKey;
     private String userId;
     private String mobile;
+    private Boolean isCategory;
     private SharedPreferences pb;
+    private String mCategoryId;
     private RequestQueue mRequestQueue;
     private String password;
+    private PassProductInfoListener mListener;
     private ArrayList<String> mImageViews = new ArrayList<>();
     private ArrayList<String> mImageIds = new ArrayList<>();
-//    private ArrayList<String> subImageViews;
-//    private ArrayList<String> subImageIds;
+    private ArrayList<String> mSubCategoryIds = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.default_home, container, false);
-        //mRecyclerView =  mView.findViewById(R.id.recyclerView);
+        isCategory = true;
         mRequestQueue = Volley.newRequestQueue(getActivity());
-        final ArrayList<String> subImageViews = new ArrayList<>();
-        final ArrayList<String> subImageIds = new ArrayList<>();
 
         pb = getActivity().getSharedPreferences("ecommerce", 0);
         Map<String, ?> allEntries = pb.getAll();
@@ -77,19 +70,20 @@ public class DefaultHomeFragment extends Fragment implements MenuActivity.onRece
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mAdapter = new CustomRecyclerViewAdapter(getActivity(), mImageViews);
         mRecyclerView.setAdapter(mAdapter);
+
         mAdapter.setListener(new CategoryClickListener() {
             @Override
             public void onCategoryClick(View v, int position) {
-                Log.d("Position", (position - 1) + "");
-                Toast.makeText(getActivity(), mImageViews.get(position - 1), Toast.LENGTH_SHORT).show();
-                String categoryId = mImageIds.get(position - 1);
-                ArrayList<String> subImageViews = new ArrayList<>();
-                ArrayList<String> subImageIds = new ArrayList<>();
-                requestCategory(categoryId, subImageIds, subImageViews);
+                mCategoryId = mImageIds.get(position - 1);
+                requestCategory(mCategoryId);
             }
         });
 
         return mView;
+    }
+
+    public void setOnProductInforListener(PassProductInfoListener productInforListener){
+        this.mListener = productInforListener;
     }
 
     @Override
@@ -100,7 +94,7 @@ public class DefaultHomeFragment extends Fragment implements MenuActivity.onRece
         this.password = password;
     }
 
-    public void requestCategory(String categoryId, final ArrayList<String> subImageIds, final ArrayList<String> subImageViews) {
+    public void requestCategory(final String categoryId) {
         String sub_cateory_url = "http://rjtmobile.com/ansari/shopingcart/androidapp/cust_sub_category.php?Id="
                 + categoryId + "&api_key=" + apiKey + "&user_id=" + userId;
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -109,26 +103,36 @@ public class DefaultHomeFragment extends Fragment implements MenuActivity.onRece
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            ArrayList<String> subImageViews = new ArrayList<>();
                             JSONArray jsonArray = response.getJSONArray("subcategory");
-                            ArrayList<String> images = new ArrayList<>();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 String scid = jsonObject.getString("scid");
                                 String cname = jsonObject.getString("scname");
                                 String sdiscription = jsonObject.getString("scdiscription");
                                 String cimage = jsonObject.getString("scimageurl");
-
+                                mSubCategoryIds.add(scid);
                                 pb.edit().putString("scid" + scid, cimage).apply();
-                                subImageIds.add(scid);
                                 subImageViews.add(cimage);
                             }
-                            mAdapter.setImageData(subImageViews);
-                            mAdapter.notifyDataSetChanged();
-                            Log.d("SUBImageIds", subImageIds.size() + "");
+
+                            CategoryFragment fragment = new CategoryFragment();
+                            Bundle b = new Bundle();
+                            b.putString("APIKEY", apiKey);
+                            b.putString("CID", mCategoryId);
+                            b.putString("USERID", userId);
+                            b.putStringArrayList("IMAGES", subImageViews);
+                            b.putStringArrayList("SCIDS", mSubCategoryIds);
+                            fragment.setArguments(b);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.fragmentContainer, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                           // subImageViews.clear();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 }, new Response.ErrorListener() {
 
@@ -139,4 +143,5 @@ public class DefaultHomeFragment extends Fragment implements MenuActivity.onRece
         });
         mRequestQueue.add(jsonObjReq);
     }
+
 }

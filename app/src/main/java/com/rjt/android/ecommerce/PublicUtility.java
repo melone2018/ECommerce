@@ -14,7 +14,7 @@ public class PublicUtility {
     private String LOGINSITE;
     private String CATEGORYSITE;
     private SharedPreferences mSharedPreferenes;
-    private List<Category> sCategories;
+    //private List<Category> sCategories;
     private String SharedFile;
     private String MOBILE_NUMBER_USED;
 
@@ -25,7 +25,7 @@ public class PublicUtility {
     public PublicUtility getInstance(){
         if(sPublicUtility==null)
         {
-            sCategories = new ArrayList<>();
+          //  sCategories = new ArrayList<>();
             SharedFile = "Ecommerce";
             MOBILE_NUMBER_USED = "Mobile number not register";
             REGISTRATION_SITE = "http://rjtmobile.com/aamir/e-commerce/android-app/shop_reg.php?";
@@ -35,15 +35,6 @@ public class PublicUtility {
 
         }
         return sPublicUtility;
-    }
-
-
-    public void setCategories(Category category) {
-        sCategories.add(category);
-    }
-
-    public List<Category> getCategories() {
-        return sCategories;
     }
 
     public SharedPreferences getmSharedPreferenes() {
@@ -73,12 +64,4 @@ public class PublicUtility {
         return LOGINSITE+ "mobile=" + mobile + "&password="+password;
     }
 
-
-    public ArrayList<String> getImages(){
-        ArrayList<String> images = new ArrayList<>();
-        for(int i = 0; i < sCategories.size();i++){
-            images.add(sCategories.get(i).getCimegrl());
-        }
-        return images;
-    }
 }

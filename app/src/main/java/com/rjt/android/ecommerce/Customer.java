@@ -61,7 +61,7 @@ public class Customer {
 			Map.Entry<Product, Integer> product = mapIter.next();
 			Product p = product.getKey();
 			int num = product.getValue();
-			bill += p.getPrice() * num; 
+			bill += Double.valueOf(p.getPrice()) * num;
 		}
 		return bill;
 	}

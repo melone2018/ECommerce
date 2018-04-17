@@ -26,7 +26,8 @@
             android:name=".android.ecommerce.MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".android.ecommerce.ProductActivity"></activity>
+        <activity android:name=".android.ecommerce.ProductActivity" />
+        <activity android:name=".android.ecommerce.PrepareActivity"></activity>
     </application>
 
 </manifest>

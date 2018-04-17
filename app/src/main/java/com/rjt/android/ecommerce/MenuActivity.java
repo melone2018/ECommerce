@@ -26,7 +26,8 @@ import com.rjt.R;
 import java.util.ArrayList;
 
 public class MenuActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener
+{
     ProfileFragment mProfileFragment;
     ViewPager mViewPager;
     LinearLayout sliderDotspanel;
@@ -42,19 +43,25 @@ public class MenuActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+//
+//        try{
+//            Bundle b = getIntent().getExtras();
+//            if(b.getStringArray("CategoryClicked").length==3){
+//                String[] s = b.getStringArray("CategoryClicked");
+//                Log.d("SubCatRequest", s[0]);
+//                Log.d("SubCatRequest", s[1]);
+//                Log.d("SubCatRequest", s[2]);
+//            }
+//        }catch (NullPointerException e){
+//            e.printStackTrace();
+//        }
+
         String[] userInfo = new String[]{};
         userInfo = getIntent().getExtras().getStringArray("USERINFO");
-        Log.d("ID:", userInfo[0]);
-        Log.d("PW:", userInfo[1]);
-        Log.d("API", userInfo[2]);
         String mobile = userInfo[0];
         String userPw = userInfo[1];
         String apiKey = userInfo[2];
         String userId = userInfo[3];
-        Log.d("MOBILE", mobile);
-        Log.d("PASSWORD", userPw);
-        Log.d("APIKEY", apiKey);
-        Log.d("USERID", userId);
         DefaultHomeFragment homeFragment = new DefaultHomeFragment();
         inforListener = (onReceiveUserInfoListener)homeFragment;
         inforListener.onUserInfoReceived(mobile, userPw, apiKey, userId);
@@ -62,7 +69,6 @@ public class MenuActivity extends AppCompatActivity
                 beginTransaction().
                 add(R.id.fragmentContainer, homeFragment, "HOMEKEY").
                 commit();
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -130,12 +136,9 @@ public class MenuActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     public interface onReceiveUserInfoListener{
         public void onUserInfoReceived(String mobile, String password, String apiKey, String userId);
     }
 
-
-    public void initializeViewPager() {
-
-    }
 }

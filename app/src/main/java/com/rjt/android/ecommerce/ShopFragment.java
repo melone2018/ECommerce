@@ -1,5 +1,6 @@
 package com.rjt.android.ecommerce;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,30 +28,31 @@ public class ShopFragment extends Fragment {
     private int mDotscount;
     private ImageView[] dots;
     private ArrayList<String> mImageViews = new ArrayList<>();
-    private ArrayList<String> mImageIds = new ArrayList<>();
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Intent intent = new Intent(getActivity(), MenuActivity.class);
+        startActivity(intent);
         // Inflate the layout for this fragment
-        mView =  inflater.inflate(R.layout.default_home, container, false);
-        //mRecyclerView =  mView.findViewById(R.id.recyclerView);
-
-        SharedPreferences pb = getActivity().getSharedPreferences("ecommerce", 0);
-        Map<String, ?> allEntries = pb.getAll();
-        for(Map.Entry<String, ?> entry : allEntries.entrySet()){
-            mImageViews.add(entry.getValue().toString());
-            mImageIds.add(entry.getKey());
-        }
-        mRecyclerView = mView.findViewById(R.id.recyclerView);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        mLayoutManager = new StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL);
-        //mRecyclerView.setLayoutManager(mLayoutManager);
-//        Log.d("IMG", mImageViews.size()+"");
-        mAdapter = new CustomRecyclerViewAdapter(getActivity(), mImageViews);
-        mRecyclerView.setAdapter(mAdapter);
+//        mView =  inflater.inflate(R.layout.default_home, container, false);
+//        //mRecyclerView =  mView.findViewById(R.id.recyclerView);
+//
+//        SharedPreferences pb = getActivity().getSharedPreferences("ecommerce", 0);
+//        Map<String, ?> allEntries = pb.getAll();
+//        for(Map.Entry<String, ?> entry : allEntries.entrySet()){
+//            if(entry.getKey().substring(0, 3).equals("cid"))
+//                mImageViews.add(entry.getValue().toString());
+//            //mImageIds.add(entry.getKey());
+//        }
+//        mRecyclerView = mView.findViewById(R.id.recyclerView);
+//        mRecyclerView.setHasFixedSize(true);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+////        mLayoutManager = new StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL);
+//        //mRecyclerView.setLayoutManager(mLayoutManager);
+////        Log.d("IMG", mImageViews.size()+"");
+//        mAdapter = new CustomRecyclerViewAdapter(getActivity(), mImageViews);
+//        mRecyclerView.setAdapter(mAdapter);
 
 //        mViewPager = mView.findViewById(R.id.viewPager);
 //        sliderDotspanel = mView.findViewById(R.id.SliderDots);
